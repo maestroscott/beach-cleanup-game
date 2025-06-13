@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 
 const trashItems = [
-  { id: 1, top: '30%', left: '20%' },
-  { id: 2, top: '50%', left: '70%' },
-  { id: 3, top: '65%', left: '40%' },
-  { id: 4, top: '20%', left: '55%' },
-  { id: 5, top: '80%', left: '10%' },
+  { id: 1, top: '30%', left: '20%', image: '/trash1.png' },
+  { id: 2, top: '50%', left: '70%', image: '/trash2.png' },
+  { id: 3, top: '65%', left: '40%', image: '/trash3.png' },
+  { id: 4, top: '20%', left: '55%', image: '/trash4.png' },
+  { id: 5, top: '80%', left: '10%', image: '/trash5.png' },
 ];
 
 export default function BeachCleanupGame() {
@@ -26,6 +26,11 @@ export default function BeachCleanupGame() {
     setLevel(2);
   };
 
+  const handleReplay = () => {
+    setFoundItems([]);
+    setLevel(1);
+  };
+
   return (
     <div className="p-4 max-w-screen-md mx-auto">
       {level === 1 ? (
@@ -34,12 +39,14 @@ export default function BeachCleanupGame() {
             <button
               key={item.id}
               onClick={() => handleFind(item.id)}
-              className={`absolute w-6 h-6 sm:w-8 sm:h-8 bg-green-500 rounded-full opacity-70 hover:opacity-100 transition-transform duration-200 ${
+              className={`absolute w-12 h-12 sm:w-16 sm:h-16 transition-transform duration-200 ${
                 foundItems.includes(item.id) ? 'scale-0' : 'scale-100'
               }`}
               style={{ top: item.top, left: item.left }}
               aria-label={`Trash item ${item.id}`}
-            />
+            >
+              <img src={item.image} alt={`Trash ${item.id}`} className="w-full h-full object-contain" />
+            </button>
           ))}
           {foundItems.length === trashItems.length && (
             <div className="absolute inset-0 flex justify-center items-center bg-black/60 rounded-xl">
@@ -65,6 +72,9 @@ export default function BeachCleanupGame() {
           <p>
             More info on plastic pollution: <a href="https://oceanconservancy.org/trash-free-seas/" target="_blank" className="underline text-blue-600">Ocean Conservancy</a>
           </p>
+          <button onClick={handleReplay} className="bg-blue-500 text-white text-base sm:text-lg px-4 py-2 rounded shadow">
+            Play Again
+          </button>
         </div>
       )}
     </div>
