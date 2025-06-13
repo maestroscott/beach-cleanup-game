@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 
 const trashItems = [
-  { id: 1, top: '30%', left: '20%', image: '/trash1.png' },
-  { id: 2, top: '50%', left: '70%', image: '/trash2.png' },
-  { id: 3, top: '65%', left: '40%', image: '/trash3.png' },
-  { id: 4, top: '20%', left: '55%', image: '/trash4.png' },
-  { id: 5, top: '80%', left: '10%', image: '/trash5.png' },
+  { id: 1, top: '30%', left: '20%' },
+  { id: 2, top: '50%', left: '70%' },
+  { id: 3, top: '65%', left: '40%' },
+  { id: 4, top: '20%', left: '55%' },
+  { id: 5, top: '80%', left: '10%' },
 ];
 
 export default function BeachCleanupGame() {
@@ -39,13 +39,17 @@ export default function BeachCleanupGame() {
             <button
               key={item.id}
               onClick={() => handleFind(item.id)}
-              className={`absolute w-12 h-12 sm:w-16 sm:h-16 transition-transform duration-200 ${
+              className={`absolute transition-transform duration-200 ${
                 foundItems.includes(item.id) ? 'scale-0' : 'scale-100'
               }`}
               style={{ top: item.top, left: item.left }}
               aria-label={`Trash item ${item.id}`}
             >
-              <img src={item.image} alt={`Trash ${item.id}`} className="w-full h-full object-contain" />
+              <img 
+                src={`/trash${item.id}.png`} 
+                alt={`Trash item ${item.id}`} 
+                className="w-12 h-12"
+              />
             </button>
           ))}
           {foundItems.length === trashItems.length && (
@@ -63,8 +67,7 @@ export default function BeachCleanupGame() {
         <div className="max-w-2xl mx-auto bg-white shadow rounded-xl p-6 space-y-4 text-base sm:text-lg">
           <p>🎉 Great job! Now it’s time to clean up the real world.</p>
           <p>
-            Head to a local beach, park, or public space and pick up 5 pieces of litter. Be safe—wear gloves and
-            dispose or recycle properly!
+            Head to a local beach, park, or public space and pick up 5 pieces of litter. Be safe—wear gloves and dispose or recycle properly!
           </p>
           <p>
             Learn more from <a href="https://www.take3.org/" target="_blank" className="underline text-blue-600">Take 3 for the Sea</a>
@@ -72,9 +75,11 @@ export default function BeachCleanupGame() {
           <p>
             More info on plastic pollution: <a href="https://oceanconservancy.org/trash-free-seas/" target="_blank" className="underline text-blue-600">Ocean Conservancy</a>
           </p>
-          <button onClick={handleReplay} className="bg-blue-500 text-white text-base sm:text-lg px-4 py-2 rounded shadow">
-            Play Again
-          </button>
+          <div className="flex justify-center">
+            <button onClick={handleReplay} className="bg-blue-500 text-white text-base sm:text-xl px-4 py-2 rounded shadow">
+              Play Again
+            </button>
+          </div>
         </div>
       )}
     </div>
