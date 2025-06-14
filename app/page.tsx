@@ -96,10 +96,13 @@ export default function BeachCleanupGame() {
             <li>Be safe—wear gloves and dispose or recycle properly!</li>
           </ul>
           <p>
-            Learn more: <a href="https://www.take3.org/" target="_blank" className="underline text-blue-600">Take 3 for the Sea</a>
+            Learn more from other places that also care about making the world clean: <a href="https://www.take3.org/" target="_blank" className="underline text-blue-600">Take 3 for the Sea</a>
           </p>
           <p>
-            More info: <a href="https://oceanconservancy.org/trash-free-seas/" target="_blank" className="underline text-blue-600">Ocean Conservancy</a>
+            And <a href="https://oceanconservancy.org/trash-free-seas/" target="_blank" className="underline text-blue-600">Ocean Conservancy</a>
+          </p>
+          <p>
+            Are just two other organizations that care about our Oceans and Seas.
           </p>
           <div className="flex justify-center">
             <button onClick={handleReplay} className="bg-green-500 hover:bg-green-600 transition text-white text-xl px-6 py-3 rounded-full shadow-lg">
