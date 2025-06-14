@@ -12,7 +12,7 @@ const trashItems = [
 
 export default function BeachCleanupGame() {
   const [foundItems, setFoundItems] = useState<number[]>([]);
-  const [level, setLevel] = useState(0); // 0 = splash, 1 = game, 2 = complete
+  const [level, setLevel] = useState(0); // 0 = splash screen, 1 = game, 2 = level 2
 
   const handleFind = (id: number) => {
     if (!foundItems.includes(id)) {
@@ -22,8 +22,14 @@ export default function BeachCleanupGame() {
     }
   };
 
-  const handleStart = () => setLevel(1);
-  const handleNextLevel = () => setLevel(2);
+  const handleStart = () => {
+    setLevel(1);
+  };
+
+  const handleNextLevel = () => {
+    setLevel(2);
+  };
+
   const handleReplay = () => {
     setFoundItems([]);
     setLevel(1);
@@ -31,15 +37,11 @@ export default function BeachCleanupGame() {
 
   return (
     <div className="p-4 max-w-screen-md mx-auto">
-
-      {/* Splash Screen */}
       {level === 0 && (
-        <div className="max-w-2xl mx-auto bg-white shadow rounded-xl p-6 space-y-4 text-center">
+        <div className="max-w-2xl mx-auto bg-white shadow rounded-xl p-6 space-y-4 text-base sm:text-lg text-center">
           <h1 className="text-3xl font-bold text-blue-600 mb-4">🌊 Beach Cleanup Game 🌊</h1>
           <p className="text-lg">The beaches are being destroyed.</p>
-          <p className="text-lg font-semibold">
-            Help save the beaches by picking up five pieces of trash!
-          </p>
+          <p className="text-lg font-semibold">Help save the beaches by picking up five pieces of trash!</p>
           <button
             onClick={handleStart}
             className="mt-6 bg-blue-500 hover:bg-blue-600 transition text-white text-xl px-6 py-3 rounded-full shadow-lg"
@@ -49,7 +51,6 @@ export default function BeachCleanupGame() {
         </div>
       )}
 
-      {/* Game Screen */}
       {level === 1 && (
         <div className="relative w-full aspect-[4/3] bg-[url('/beach.jpg')] bg-cover bg-center border rounded-xl shadow-md overflow-hidden">
           {trashItems.map((item) => (
@@ -85,7 +86,6 @@ export default function BeachCleanupGame() {
         </div>
       )}
 
-      {/* Completion Screen */}
       {level === 2 && (
         <div className="max-w-2xl mx-auto bg-white shadow rounded-xl p-6 space-y-4 text-base sm:text-lg">
           <p className="text-xl font-semibold">🎉 Great job!</p>
@@ -96,23 +96,19 @@ export default function BeachCleanupGame() {
             <li>Be safe — wear gloves and dispose or recycle properly!</li>
           </ul>
           <p>
-            Learn more from other places that care about making the world clean:
-            <a href="https://www.take3.org/" target="_blank" className="underline text-blue-600 ml-1">Take 3 for the Sea</a>
-          </p>
-          <p>
-            And <a href="https://oceanconservancy.org/trash-free-seas/" target="_blank" className="underline text-blue-600">Ocean Conservancy</a> are just two other organizations that care about our oceans and seas.
+            Learn more about keeping our beaches clean:{' '}
+            <a href="https://www.take3.org/" target="_blank" className="underline text-blue-600">Take 3 for the Sea</a>{' '}
+            and{' '}
+            <a href="https://oceanconservancy.org/trash-free-seas/" target="_blank" className="underline text-blue-600">Ocean Conservancy</a>{' '}
+            are two great organizations helping to protect our oceans.
           </p>
           <div className="flex justify-center">
-            <button
-              onClick={handleReplay}
-              className="bg-green-500 hover:bg-green-600 transition text-white text-xl px-6 py-3 rounded-full shadow-lg"
-            >
+            <button onClick={handleReplay} className="bg-green-500 hover:bg-green-600 transition text-white text-xl px-6 py-3 rounded-full shadow-lg">
               Play Again
             </button>
           </div>
         </div>
       )}
-
     </div>
   );
 }
