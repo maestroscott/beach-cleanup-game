@@ -3,33 +3,35 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 
-type TrashItem = { id: number; top: string; left: string };
+interface TrashItem {
+  id: number;
+  top: string;
+  left: string;
+}
 
-const generateTrashItems = (): TrashItem[] => {
-  return Array.from({ length: 5 }, (_, i) => ({
-    id: i + 1,
-    top: `${20 + Math.random() * 60}%`,
-    left: `${10 + Math.random() * 70}%`,
-  }));
+const generateRandomTrash = (): TrashItem[] => {
+  const items: TrashItem[] = [];
+  for (let i = 1; i <= 5; i++) {
+    items.push({
+      id: i,
+      top: `${Math.floor(Math.random() * 80) + 10}%`,
+      left: `${Math.floor(Math.random() * 80) + 10}%`,
+    });
+  }
+  return items;
 };
 
 export default function BeachCleanupGame() {
   const [foundItems, setFoundItems] = useState<number[]>([]);
-  const [level, setLevel] = useState(0); // 0 = splash, 1 = game, 2 = level 2, 3 = end screen
+  const [level, setLevel] = useState<number>(0);
   const [trashItems, setTrashItems] = useState<TrashItem[]>([]);
 
   useEffect(() => {
     if (level === 1 || level === 2) {
-      setTrashItems(generateTrashItems());
+      setTrashItems(generateRandomTrash());
       setFoundItems([]);
     }
   }, [level]);
-
-  useEffect(() => {
-    if (foundItems.length === 5) {
-      confetti();
-    }
-  }, [foundItems]);
 
   const handleFind = (id: number) => {
     if (!foundItems.includes(id)) {
@@ -39,17 +41,15 @@ export default function BeachCleanupGame() {
     }
   };
 
-  const handleStart = () => {
-    setLevel(1);
-  };
+  const handleStart = () => setLevel(1);
+  const handleNextLevel = () => setLevel(2);
+  const handleReplay = () => setLevel(1);
 
-  const handleNextLevel = () => {
-    setLevel(level + 1);
-  };
-
-  const handleReplay = () => {
-    setLevel(1);
-  };
+  useEffect(() => {
+    if (foundItems.length === 5) {
+      confetti();
+    }
+  }, [foundItems]);
 
   return (
     <div className="p-4 max-w-screen-md mx-auto">
@@ -91,38 +91,42 @@ export default function BeachCleanupGame() {
 
           {foundItems.length === trashItems.length && (
             <div className="absolute inset-0 flex justify-center items-center bg-black/60 rounded-xl transition-opacity">
-              <button
-                onClick={handleNextLevel}
-                className="bg-yellow-400 text-black text-xl font-bold px-6 py-3 rounded-full shadow-lg animate-pulse"
-              >
-                {level === 1 ? 'Go to Level 2' : 'Finish'}
-              </button>
+              {level === 1 ? (
+                <button
+                  onClick={handleNextLevel}
+                  className="bg-yellow-400 text-black text-xl font-bold px-6 py-3 rounded-full shadow-lg animate-pulse"
+                >
+                  Go to Level 2
+                </button>
+              ) : (
+                <div className="flex justify-center items-center flex-col space-y-4">
+                  <p className="text-white text-xl font-bold">🎉 You did it!</p>
+                  <button
+                    onClick={handleReplay}
+                    className="bg-green-500 hover:bg-green-600 text-white text-xl px-6 py-3 rounded-full shadow-lg"
+                  >
+                    Play Again
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
       )}
 
-      {level === 3 && (
-        <div className="max-w-2xl mx-auto bg-white shadow rounded-xl p-6 space-y-4 text-base sm:text-lg">
+      {level === 2 && foundItems.length < 5 && (
+        <div className="max-w-2xl mx-auto bg-white shadow rounded-xl p-6 space-y-4 text-base sm:text-lg text-center">
           <p className="text-xl font-semibold">🎉 Great job!</p>
           <p>Now it’s time to clean up the real world:</p>
-          <ul className="list-disc list-inside">
+          <ul className="list-disc list-inside text-left">
             <li>Visit a local beach or park</li>
             <li>Pick up 5 pieces of litter</li>
             <li>Be safe — wear gloves and dispose or recycle properly!</li>
           </ul>
           <p>
-            Learn more about keeping our beaches clean:{' '}
-            <a href="https://www.take3.org/" target="_blank" className="underline text-blue-600">Take 3 for the Sea</a>{' '}
-            and{' '}
-            <a href="https://oceanconservancy.org/trash-free-seas/" target="_blank" className="underline text-blue-600">Ocean Conservancy</a>{' '}
-            are two great organizations helping to protect our oceans.
+            Learn more: <a href="https://www.take3.org/" target="_blank" className="underline text-blue-600">Take 3 for the Sea</a> and{' '}
+            <a href="https://oceanconservancy.org/trash-free-seas/" target="_blank" className="underline text-blue-600">Ocean Conservancy</a>.
           </p>
-          <div className="flex justify-center">
-            <button onClick={handleReplay} className="bg-green-500 hover:bg-green-600 transition text-white text-xl px-6 py-3 rounded-full shadow-lg">
-              Play Again
-            </button>
-          </div>
         </div>
       )}
     </div>
