@@ -44,10 +44,15 @@ export default function BeachCleanupGame() {
   const handleStart = () => setLevel(1);
   const handleNextLevel = () => setLevel(2);
   const handleReplay = () => setLevel(1);
+  const handleFinalLevel = () => setLevel(3);
 
   useEffect(() => {
     if (foundItems.length === 5) {
-      confetti();
+      confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.6 },
+      });
     }
   }, [foundItems]);
 
@@ -76,7 +81,7 @@ export default function BeachCleanupGame() {
               className={`absolute transition-all duration-300 ${
                 foundItems.includes(item.id)
                   ? 'scale-0 opacity-0 rotate-12'
-                  : 'scale-100 opacity-100 hover:scale-110'
+                  : 'scale-100 opacity-100 hover:scale-125'
               }`}
               style={{ top: item.top, left: item.left }}
               aria-label={`Trash item ${item.id}`}
@@ -99,34 +104,42 @@ export default function BeachCleanupGame() {
                   Go to Level 2
                 </button>
               ) : (
-                <div className="flex justify-center items-center flex-col space-y-4">
-                  <p className="text-white text-xl font-bold">🎉 You did it!</p>
-                  <button
-                    onClick={handleReplay}
-                    className="bg-green-500 hover:bg-green-600 text-white text-xl px-6 py-3 rounded-full shadow-lg"
-                  >
-                    Play Again
-                  </button>
-                </div>
+                <button
+                  onClick={handleFinalLevel}
+                  className="bg-green-500 text-white text-xl font-bold px-6 py-3 rounded-full shadow-lg animate-pulse"
+                >
+                  Real World Cleanup
+                </button>
               )}
             </div>
           )}
         </div>
       )}
 
-      {level === 2 && foundItems.length < 5 && (
-        <div className="max-w-2xl mx-auto bg-white shadow rounded-xl p-6 space-y-4 text-base sm:text-lg text-center">
+      {level === 3 && (
+        <div className="max-w-2xl mx-auto bg-white shadow rounded-xl p-6 space-y-4 text-base sm:text-lg">
           <p className="text-xl font-semibold">🎉 Great job!</p>
           <p>Now it’s time to clean up the real world:</p>
-          <ul className="list-disc list-inside text-left">
+          <ul className="list-disc list-inside">
             <li>Visit a local beach or park</li>
             <li>Pick up 5 pieces of litter</li>
             <li>Be safe — wear gloves and dispose or recycle properly!</li>
           </ul>
           <p>
-            Learn more: <a href="https://www.take3.org/" target="_blank" className="underline text-blue-600">Take 3 for the Sea</a> and{' '}
-            <a href="https://oceanconservancy.org/trash-free-seas/" target="_blank" className="underline text-blue-600">Ocean Conservancy</a>.
+            Learn more about keeping our beaches clean:{' '}
+            <a href="https://www.take3.org/" target="_blank" className="underline text-blue-600">Take 3 for the Sea</a>{' '}
+            and{' '}
+            <a href="https://oceanconservancy.org/trash-free-seas/" target="_blank" className="underline text-blue-600">Ocean Conservancy</a>{' '}
+            are two great organizations helping to protect our oceans.
           </p>
+          <div className="flex justify-center">
+            <button
+              onClick={handleReplay}
+              className="bg-blue-500 hover:bg-blue-600 text-white text-xl px-6 py-3 rounded-full shadow-lg"
+            >
+              Play Again
+            </button>
+          </div>
         </div>
       )}
     </div>
