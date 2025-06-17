@@ -1,18 +1,35 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import confetti from 'canvas-confetti';
 
-const trashItems = [
-  { id: 1, top: '30%', left: '20%' },
-  { id: 2, top: '50%', left: '70%' },
-  { id: 3, top: '65%', left: '40%' },
-  { id: 4, top: '20%', left: '55%' },
-  { id: 5, top: '80%', left: '10%' },
-];
+type TrashItem = { id: number; top: string; left: string };
+
+const generateTrashItems = (): TrashItem[] => {
+  return Array.from({ length: 5 }, (_, i) => ({
+    id: i + 1,
+    top: `${20 + Math.random() * 60}%`,
+    left: `${10 + Math.random() * 70}%`,
+  }));
+};
 
 export default function BeachCleanupGame() {
   const [foundItems, setFoundItems] = useState<number[]>([]);
-  const [level, setLevel] = useState(0); // 0 = splash screen, 1 = game, 2 = level 2
+  const [level, setLevel] = useState(0); // 0 = splash, 1 = game, 2 = level 2, 3 = end screen
+  const [trashItems, setTrashItems] = useState<TrashItem[]>([]);
+
+  useEffect(() => {
+    if (level === 1 || level === 2) {
+      setTrashItems(generateTrashItems());
+      setFoundItems([]);
+    }
+  }, [level]);
+
+  useEffect(() => {
+    if (foundItems.length === 5) {
+      confetti();
+    }
+  }, [foundItems]);
 
   const handleFind = (id: number) => {
     if (!foundItems.includes(id)) {
@@ -27,11 +44,10 @@ export default function BeachCleanupGame() {
   };
 
   const handleNextLevel = () => {
-    setLevel(2);
+    setLevel(level + 1);
   };
 
   const handleReplay = () => {
-    setFoundItems([]);
     setLevel(1);
   };
 
@@ -51,7 +67,7 @@ export default function BeachCleanupGame() {
         </div>
       )}
 
-      {level === 1 && (
+      {(level === 1 || level === 2) && (
         <div className="relative w-full aspect-[4/3] bg-[url('/beach.jpg')] bg-cover bg-center border rounded-xl shadow-md overflow-hidden">
           {trashItems.map((item) => (
             <button
@@ -79,14 +95,14 @@ export default function BeachCleanupGame() {
                 onClick={handleNextLevel}
                 className="bg-yellow-400 text-black text-xl font-bold px-6 py-3 rounded-full shadow-lg animate-pulse"
               >
-                Go to Level 2
+                {level === 1 ? 'Go to Level 2' : 'Finish'}
               </button>
             </div>
           )}
         </div>
       )}
 
-      {level === 2 && (
+      {level === 3 && (
         <div className="max-w-2xl mx-auto bg-white shadow rounded-xl p-6 space-y-4 text-base sm:text-lg">
           <p className="text-xl font-semibold">🎉 Great job!</p>
           <p>Now it’s time to clean up the real world:</p>
